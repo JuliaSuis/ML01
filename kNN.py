@@ -17,6 +17,7 @@ dataset, labels = repository.get_dataset_and_labels()
 for i in range(1, 10):
     print "i is",i
     # Ensure that there are no NaNs
+
     dataset = dataset.fillna(-85)
 
     #dataset = dataset.truncate(after=19)
