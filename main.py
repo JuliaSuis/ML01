@@ -14,8 +14,17 @@ dataset, labels = repository.get_dataset_and_labels()
 dataset = dataset.fillna(-85)
 size = dataset.size
 
+#PCA (Principal Components Analysis ) to improve acc
+def use_PCA(dataset):
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=dataset.shape[1])
+    dataset = pca.fit_transform(dataset)
+
+use_PCA(dataset)
 dataset = dataset.truncate(after=299)
 labels= labels[:300]
+
+print dataset
 
 
 # Split the dataset into training (90 \%) and testing (10 \%)

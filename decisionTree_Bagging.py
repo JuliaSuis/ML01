@@ -20,6 +20,13 @@ bag_classifier = BaggingClassifier(dt_classifier, n_jobs=7)
 # Ensure that there are no NaNs
 dataset=dataset.fillna(-85)
 
+def use_PCA(dataset):
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=dataset.shape[1])
+    dataset = pca.fit_transform(dataset)
+
+use_PCA(dataset)
+
 # Split the dataset into training (90 \%) and testing (10 \%)
 X_train, X_test, y_train, y_test = train_test_split(dataset, labels, test_size = 0.1)
 
