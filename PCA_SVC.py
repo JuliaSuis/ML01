@@ -49,20 +49,23 @@ for i in range(1,50,4):
     print "accurancy= ", ac
 
      # calculating the error
-    predictY = [repository.locations.keys()[i] for i in grid_search.predict(X_test)]
-    # print predictY
-    for lat, long in predictY:
-        predictLat = lat
-        predictLong = long
-    # print y_test
-    for lat, long in y_test:
-        RealLat = lat
-        RealLong = long
+    predict_locations = [repository.locations.keys()[i] for i in grid_search.predict(X_test)]
+    label_test = y_test
+    sumOfErr = 0
+    length_of_test_data = len(label_test)
+    for i in range(0, length_of_test_data):
+        real_loc = label_test[i]
+        RealLat = real_loc[0]
+        RealLong = real_loc[1]
+        predict_loc = predict_locations[i]
+        predictLat = predict_loc[0]
+        predictLong = predict_loc[1]
 
-    DiffLat = predictLat - RealLat
-    DiffLong = predictLong - RealLong
-    Cst = math.pi / 180
-    R = 6378.1  # Radius of the Earth
+        DiffLat = predictLat - RealLat
+        DiffLong = predictLong - RealLong
+        Cst = math.pi / 180
+        R = 6378.1  # Radius of the Earth
+        sumOfErr = sumOfErr + (R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2)))
 
-    Em = R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2))
-    print "error= ", Em
+    error = sumOfErr / length_of_test_data;
+    print("error", error)  #
