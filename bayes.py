@@ -39,45 +39,35 @@ print("accurancy= ", ac)
 #missing data = min of level => 0.165,0.149
 #missing data = 0 => 0.14
 
-predict_locations_indexes = clf.predict(dataset_test) # it gives the level information and returns the index of label information,
-                                                        # the index of location
+
+
+#error Calculation
+predict_locations_indexes = clf.predict(dataset_test) # it gives the level information and returns the index of label information,                                                        # the index of location
 real_locations = list(repository.locations.keys())
 predict_locations = [real_locations[i] for i in predict_locations_indexes] # we retrive the location by index
 
-for lat, long in predict_locations: # get the location label of predicted data
-    predictLat = lat
-    predictLong = long
 
-for lat, long in label_test: # get the label location of test data
-    RealLat = lat
-    RealLong = long
+#train set = {train set of level, train set of locations}
+#test set = {test set of level, test set of locations}
 
+#train a model with training set
+#based on model predict locations for test set of levels, then compare the rsult with test test of locations
 
+sumOfErr = 0
+length_of_test_data = len(label_test)
+for i in range(0, length_of_test_data):
+    real_loc = label_test[i]
+    RealLat = real_loc[0]
+    RealLong = real_loc[1]
+    predict_loc = predict_locations[i]
+    predictLat = predict_loc[0]
+    predictLong = predict_loc[1]
 
-print (predictLat)
-DiffLat = predictLat - RealLat
-DiffLong = predictLong - RealLong
-Cst = math.pi / 180
-R = 6378.1  # Radius of the Earth
+    DiffLat = predictLat - RealLat
+    DiffLong = predictLong - RealLong
+    Cst = math.pi / 180
+    R = 6378.1  # Radius of the Earth
+    sumOfErr = sumOfErr + (R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2)))
 
-Em = R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2))
-print("error= ", Em)
-
-#
-# label_test_index = 0
-# for i in predict_locations_indexes: # get the location label of predicted data
-#     predict_location = real_locations[i]
-#     reallocation = label_test[label_test_index]
-#     label_test_index = label_test_index + 1
-#
-# for lat, long in label_test: # get the label location of test data
-#     RealLat = lat
-#     RealLong = long
-#
-# DiffLat = predictLat - RealLat
-# DiffLong = predictLong - RealLong
-# Cst = math.pi / 180
-# R = 6378.1  # Radius of the Earth
-#
-# Em = R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2))
-# print("error= ", Em) #0.03721078098007929
+error = sumOfErr / length_of_test_data;
+print ("error",error) # 0.009606909422648182
