@@ -41,22 +41,27 @@ def find_accurancy(classifier):
 
 
 def find_error(classifier):
-    predictY = [repository.locations.keys()[i] for i in classifier.predict(X_test)]
-    #print  ("predictY: ", predictY)
-    for lat, long in predictY:
-        predictLat = lat
-        predictLong = long
-    # print y_test
-    for lat, long in y_test:
-        RealLat = lat
-        RealLong = long
-    DiffLat = predictLat - RealLat
-    DiffLong = predictLong - RealLong
-    Cst = math.pi / 180
-    R = 6378.1
+    predict_locations  = [repository.locations.keys()[i] for i in classifier.predict(X_test)]
+    label_test = y_test
 
-    Em = R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2))
-    print ("error = ", Em)
+    sumOfErr = 0
+    length_of_test_data = len(label_test)
+    for i in range(0, length_of_test_data):
+        real_loc = label_test[i]
+        RealLat = real_loc[0]
+        RealLong = real_loc[1]
+        predict_loc = predict_locations[i]
+        predictLat = predict_loc[0]
+        predictLong = predict_loc[1]
+
+        DiffLat = predictLat - RealLat
+        DiffLong = predictLong - RealLong
+        Cst = math.pi / 180
+        R = 6378.1  # Radius of the Earth
+        sumOfErr = sumOfErr + (R * Cst * math.sqrt(math.pow(DiffLat, 2) + math.pow(DiffLong, 2)))
+
+    error = sumOfErr / length_of_test_data;
+    print("error", error)  
 
 find_accurancy(dt_classifier)
 find_error(dt_classifier)
