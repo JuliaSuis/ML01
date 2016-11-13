@@ -14,7 +14,7 @@ repository = Repository(config)
 dataset, labels = repository.get_dataset_and_labels()
 
 
-for i in range(1, 10):
+for i in range(3, 10):
     print "i is",i
     # Ensure that there are no NaNs
 
