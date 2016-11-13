@@ -11,6 +11,8 @@ import math
 repository = Repository(config)
 dataset, labels = repository.get_dataset_and_labels()
 
+dataset = dataset.dropna(axis=0, how='')
+
 dataset=dataset.fillna(-85)
 
 def use_PCA(dataset):
@@ -18,11 +20,11 @@ def use_PCA(dataset):
     pca = PCA(n_components=dataset.shape[1])
     dataset = pca.fit_transform(dataset)
 
-use_PCA(dataset)
+#use_PCA(dataset)
 
 
 from sklearn.ensemble import RandomForestClassifier
-rf_classifier = RandomForestClassifier(n_estimators=8)
+rf_classifier = RandomForestClassifier(n_estimators=7)
 
 # Ensure that there are no NaNs
 

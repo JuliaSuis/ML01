@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.model_selection import ShuffleSplit
 from sklearn.model_selection import GridSearchCV
+from IPython.display import Image
+import pydotplus
 
 from repository import Repository
 from configuration import config
@@ -20,19 +22,21 @@ bag_classifier = BaggingClassifier(dt_classifier, n_jobs=7)
 # Ensure that there are no NaNs
 dataset=dataset.fillna(-85)
 
+#principle component analysis
 def use_PCA(dataset):
     from sklearn.decomposition import PCA
     pca = PCA(n_components=dataset.shape[1])
     dataset = pca.fit_transform(dataset)
 
-use_PCA(dataset)
+#use_PCA(dataset)
 
 # Split the dataset into training (90 \%) and testing (10 \%)
 X_train, X_test, y_train, y_test = train_test_split(dataset, labels, test_size = 0.1)
 
-#run Decission Tree Classifier
+#Decission Tree Classifier
 dt_classifier.fit(X_train, [repository.locations.keys().index(tuple(i)) for i in y_train])
-#run Bagging Classifier
+
+#Bagging Classifier
 bag_classifier.fit(X_train, [repository.locations.keys().index(tuple(i)) for i in y_train])
 
 def find_accurancy(classifier):
